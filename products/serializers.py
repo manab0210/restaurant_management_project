@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from .models import Item
+from .models import Note
 
-class ItemSerializer(serializers.ModelSerializer):
+class NoteSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Item
-        fields = '__all__'
+        model = Note
+        fields = ['id', 'title', 'content', 'created_at', 'owner']
+        # Set owner as read_only so it can't be changed via API input
+        read_only_fields = ['owner', 'created_at']
