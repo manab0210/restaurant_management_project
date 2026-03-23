@@ -1,10 +1,12 @@
-import secrets
-import string
-from django.apps import apps
-def generate_coupon_code(lenght=10):
-    characters=string.ascii_uppercase+string.digits
-    Coupon=apps.get_model('orders','Coupon')
-    while True:
-        code=''.join(secrets.choice(characters) for _ in range(length))
-        if not Coupon.objects.filter(code=code).exists():
-            return code
+from django.utils import timezone
+from .modles import DailyOperatingHours
+
+def get_today_operating_hours():
+    current_day=timezone.now().strftime('%A')
+
+try:
+    hours_entry=DailyOperatingHours.objects.get(day_name=current_day)
+
+    return (hours_entry.open_time,hours_entry.close_time)
+except DailyOperatingHours.DoesNotExist:
+    return(None,None)
