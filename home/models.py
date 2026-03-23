@@ -1,4 +1,5 @@
-from django.db import db,models
+from django.db import db
+from django.db import models
 
 # Create your models here.
 class MenuCategory(models.Model):
@@ -9,3 +10,7 @@ class MenuCategory(models.Model):
     
     # class Meta:
     #     verbose_name_plural="MenuCategories"
+class Restaurant(models.Model):
+    has_delivery=models.BooleanField(default=False)
+    def __clstr__(self):
+        return self.name
