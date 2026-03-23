@@ -5,3 +5,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     class __all__:
         model =MenuItem
         fields='__all__'
+class RestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Restaurant
+        fields=['name','address','has_delivery']
