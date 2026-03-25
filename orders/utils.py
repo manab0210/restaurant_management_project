@@ -1,21 +1,6 @@
-# from django.utils import timezone
-# from .modles import DailyOperatingHours
-
-# def get_today_operating_hours():
-#     current_day=timezone.now().strftime('%A')
-
-# try:
-#     hours_entry=DailyOperatingHours.objects.get(day_name=current_day)
-
-#     return (hours_entry.open_time,hours_entry.close_time)
-# except DailyOperatingHours.DoesNotExist:
-#     return(None,None)
-    
-from django.db.modles import Sum
-from .modles import Order
-
-def get_daily_sales_total(date):
-    """Calculates total sales for a specific date.
-    'date' should be a datetime.date object."""
-    daily_orders=Order.objects.filter(created_at__date=date)
-    result=daily_orders.aggregate(total_sum=Sum('total_price'))
+from decimal import Decimal,ROUND_HALF_UP
+def calculate_tip_amount(order_total,tip_percentage):
+    total=Decimal(str(order_total))
+    percentage=Decimal(str(tip_percentage))/Decimal('100')
+    tip_amount=total*percentage
+    return tip_amount.quantize(Decimal('0.01'),rounding=ROUND_HALF_UP)
