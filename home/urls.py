@@ -1,5 +1,10 @@
-from django.urls import path
-from .views import MenuItemIngredientsView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import MenuItemViewSet
+
+router= DefaultRouter()
+router.register(r'menu-items',MenuItemViewSet)
+
 urlpatterns=[
-    path('api/menu-items/<int:pk>/ingredients/',MenuItemIngredientsView.as_view(),name='menu-item-ingredient')
+    path('',include(router.urls)),
 ]
