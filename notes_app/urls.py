@@ -1,7 +1,4 @@
 from django.urls import path,include
-from rest_framework.routers import DefaultRouter
 from .views import MenuItemViewSet
 
-router=DefaultRouter()
-router.register(r'menu-items',MenuItemViewSet)
-urlpatterns=[path('',include(router.urls)),]
+urlpatterns=[path('menu-items/',MenuItemListView.as_view(),name='menu-item-list'),]
