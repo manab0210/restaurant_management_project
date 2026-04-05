@@ -1,18 +1,14 @@
-from rest_framework import viewsets, permissions
-from .models import Note
-from .serializers import NoteSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import MenuItem
+from .serializers import MenuItemSerializer
 
-class NoteViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing note instances.
-    """
-    serializer_class = NoteSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        # This ensures users only see their own notes
-        return Note.objects.filter(owner=self.request.user)
-
-    def perform_create(self, serializer):
-        # Automatically set the owner to the currently logged-in user
-        serializer.save(owner=self.request.user)
+class MenuItemListView(APIView):
+    def get(self,request):
+        category_name=request.query_params.get('category')
+        queryset = MenuItem.objects.all()
+        if category_name:
+            queryset=queryset.filter(category__name__iexact=category_name)
+        serializer = MenuItemSerializer(queryset,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
