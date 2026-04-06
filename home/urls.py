@@ -1,10 +1,7 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import MenuItemViewSet
-
-router= DefaultRouter()
-router.register(r'menu-items',MenuItemViewSet)
+from django.urls import path
+from .views import TableList,TableDetail
 
 urlpatterns=[
-    path('',include(router.urls)),
+    path('api/tables/',TableList.as_view(),name='table-list'),
+    path('api/tables/<int:pk>',TableDetail.as_view(),name='table-detail'),
 ]
