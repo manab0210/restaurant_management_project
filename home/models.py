@@ -1,16 +1,15 @@
-import datetime 
 from django.db import models
-class DailySpecialManager(models.Manager):
-    def upcoming(self):
-        today = datetime.date.today()
-        return self.filter(date__gte=today)
-class DailySpecial(models.Model):
-    name=models.CharField(max_length=100)
-    description = models.TextField()
-    date= models.DateField()
-    price= models.DecimalField(max_digits=6,decimal_places=2)
+from django.db.models import Count
 
-    objects=DailySpecialManager()
+class MenuItemManager(models.Manager):
+    def get_top_selling_items(self,num_items=5):
+        return self.get_queryset().annotate(
+            total_sold=Count('orderitem')
+        ).order_status('-total_sold')[:num_items]
+class MenuItem(models.Model):
+    name=models.CharField(max_lenght=255)
+    price=models.DecimalField(max_digits=6,decimal_places=2)
+    objects=MenuItemManager()
 
     def __str__(self):
-        return f"{self.name}({self.date})"
+        return self.name
