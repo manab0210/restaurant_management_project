@@ -1,25 +1,19 @@
 from django.db import models
-from django.conf import settings
-from home.models import Product
 
+class OrderManager(models.Manager):
+    def get_active_orders(self):
+        return self.filter(status__in=['pending','processing'])
 class Order(models.Model):
-    customer=models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='orders'
-    )
-    created_at=models.DateTimeField(auto_now_add=True)
-    total_price= models.DecimalField(max_digits=10,decimal_place=2)
-    is_paid=models.BooleanField(default=False)
+    STATUS_CHOICES=[
+        ('pending','Pending'),
+        ('processing','Processing'),
+        ('shipped','Shipped'),
+        ('cancelled','Cancelled'),
+    ]
+    status=models.CharField(max_length=20,choice=STATUS_CHOICES)
+    created_at=models.DateTimeFeild(auto_now_add=True)
+
+    objects=OrderManager()
 
     def __str__(self):
-        return f"Order {self.id} by {self.customer.username}"
-
-class OrderItem(models.Model):
-    order=models.ForeignKey(Order,related_name='items',on_delete=models.CASCADE)
-    product=models.ForeignKey(Product,on_delete=models.CASCADE)
-    quantity=models.PositiveIntegerField(default=1)
-    price=models.DecimalField(max_digits=10,decimal_place=2)
-
-    def __str__(self):
-        return f"{self.quantity} x {self.product.name}"
+        return f"Order {self.id} - {self.status}"
