@@ -1,11 +1,8 @@
 from rest_framework import serializers
-from .models import MenuItem
-class MenuItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=MenuItem
-        fields=['id','name','description','price','is_available']
+from .models import Table
 
-    def validate_price(self,value):
-        if value<=0:
-            raise serializers.ValidationError("The price must be a positive number.")
-        return value
+class TableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Table
+        fields=['table_number','capacity','is_available']
+        
