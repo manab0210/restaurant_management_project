@@ -23,3 +23,8 @@ class Coupon(models.Model):
         if not self.code:
             self.code=generate_coupon_code()
         super().save(*args,**kwargs)
+class Order(models.Model):
+    def get_unique_item_names(self):
+        item_names=self.orderitem_set.values_list('menu_item__name',flat=True)
+        unique_name=list(set(item_names))
+        return unique_names
